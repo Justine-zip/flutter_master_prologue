@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class JsonProvider {
-  Provider jsonDecoderProvider = Provider<int>((ref) => 0);
-}
+final jsonDecoderProvider = Provider<int>((ref) {
+  return 0;
+});

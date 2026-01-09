@@ -2,10 +2,16 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/page/json_decoder_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => ProviderScope(child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
