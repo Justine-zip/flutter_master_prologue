@@ -7,7 +7,7 @@ class JsonDecoderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final jsonProv = ref.watch(jsonDecoderProvider);
+    final usersAsync = ref.watch(usersProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -15,7 +15,24 @@ class JsonDecoderPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(child: Text('Json Decoder')),
-          Center(child: Text(jsonProv.toString())),
+          usersAsync.when(
+            data:
+                (users) => Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final user = users[index];
+                      return ListTile(
+                        title: Text(user.name),
+                        subtitle: Text(user.email),
+                        trailing: Text(user.username),
+                      );
+                    },
+                  ),
+                ),
+            error: (e, stack) => Center(child: Text(e.toString())),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          ),
         ],
       ),
     );
