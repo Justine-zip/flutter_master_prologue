@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_master_prologue/notifier/counter_notifier.dart';
 import 'package:flutter_master_prologue/provider/counter_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +7,6 @@ class CounterPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final counter = ref.watch(counterProvider);
     final counterNoti = ref.watch(counterNotifierProvider);
     return SafeArea(
       child: Scaffold(
