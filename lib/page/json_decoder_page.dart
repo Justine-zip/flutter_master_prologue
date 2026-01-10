@@ -7,7 +7,7 @@ class JsonDecoderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final usersAsync = ref.watch(usersProvider);
+    final todosAsync = ref.watch(todosProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -15,23 +15,32 @@ class JsonDecoderPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(child: Text('Json Decoder')),
-          usersAsync.when(
+          todosAsync.when(
             data:
-                (users) => Expanded(
+                (todos) => Expanded(
                   child: ListView.builder(
-                    itemCount: users.length,
+                    itemCount: todos.length,
                     itemBuilder: (context, index) {
-                      final user = users[index];
+                      final todo = todos[index];
                       return ListTile(
-                        title: Text(user.name),
-                        subtitle: Text(user.email),
-                        trailing: Text(user.username),
+                        title: Text(
+                          (todo.id).toString(),
+                          style: TextStyle(
+                            color: todo.completed ? Colors.black : Colors.red,
+                          ),
+                        ),
+                        subtitle: Text(
+                          todo.title,
+                          style: TextStyle(
+                            color: todo.completed ? Colors.black : Colors.red,
+                          ),
+                        ),
                       );
                     },
                   ),
                 ),
-            error: (e, stack) => Center(child: Text(e.toString())),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, stack) => Text(e.toString()),
+            loading: () => Center(child: CircularProgressIndicator()),
           ),
         ],
       ),
