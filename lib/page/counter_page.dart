@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_master_prologue/component/customFloatButton.dart';
 import 'package:flutter_master_prologue/provider/counter_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,17 +32,18 @@ class CounterPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    ref.read(counterNotifierProvider.notifier).decrement();
-                  },
-                  child: Icon(Icons.arrow_circle_left),
+                Customfloatbutton(
+                  onPressed:
+                      () =>
+                          ref
+                              .read(counterNotifierProvider.notifier)
+                              .decrement(),
+                  icon: Icons.arrow_circle_left_sharp,
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    ref.read(counterNotifierProvider.notifier).reset();
-                  },
-                  child: Icon(Icons.error),
+                Customfloatbutton(
+                  onPressed:
+                      () => ref.read(counterNotifierProvider.notifier).reset(),
+                  icon: Icons.error,
                 ),
               ],
             ),
