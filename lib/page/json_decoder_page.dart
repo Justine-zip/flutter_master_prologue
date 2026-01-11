@@ -7,6 +7,7 @@ class JsonDecoderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //initialize the async provider
     final todosAsync = ref.watch(todosProvider);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -15,6 +16,7 @@ class JsonDecoderPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(child: Text('Json Decoder')),
+          //make a async.when => data, loading, error
           todosAsync.when(
             data:
                 (todos) => Expanded(
