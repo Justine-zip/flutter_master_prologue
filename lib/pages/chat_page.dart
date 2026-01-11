@@ -3,11 +3,14 @@ import 'package:flutter_master_prologue/providers/chat_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatPage extends ConsumerWidget {
-  const ChatPage({super.key});
+  ChatPage({super.key});
+
+  final TextEditingController myMsg = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatAsync = ref.watch(chatRealtimeProvider);
+    final sendChatAsync = ref.watch(sendRealtimeChat);
 
     return SafeArea(
       child: Scaffold(
@@ -61,7 +64,10 @@ class ChatPage extends ConsumerWidget {
                               children: [
                                 Text(
                                   chat.sender,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 Text(
                                   chat.message,
@@ -76,6 +82,39 @@ class ChatPage extends ConsumerWidget {
                   ),
               error: (e, _) => Text(e.toString()),
               loading: () => CircularProgressIndicator(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: myMsg,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      style: TextStyle(color: Colors.white60),
+                    ),
+                  ),
+                  SizedBox(width: 24),
+                  Icon(Icons.send_time_extension, color: Colors.white60),
+                  SizedBox(width: 18),
+                  IconButton(
+                    onPressed: () async {
+                      final text = myMsg.text.trim();
+                      if (text.isEmpty) return;
+
+                      await ref
+                          .read(sendRealtimeChat.notifier)
+                          .send(sender: 'Josh', receiver: 'Lea', message: text);
+                      myMsg.clear();
+                    },
+                    icon: Icon(Icons.send, color: Colors.white60),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
