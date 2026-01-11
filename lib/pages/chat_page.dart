@@ -2,15 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/providers/chat_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatPage extends ConsumerWidget {
-  ChatPage({super.key});
+class ChatPage extends ConsumerStatefulWidget {
+  const ChatPage({super.key});
 
+  @override
+  ConsumerState<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends ConsumerState<ChatPage> {
   final TextEditingController myMsg = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    myMsg.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final chatAsync = ref.watch(chatRealtimeProvider);
-    final sendChatAsync = ref.watch(sendRealtimeChat);
 
     return SafeArea(
       child: Scaffold(
@@ -20,13 +30,16 @@ class ChatPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-              child: Text(
-                'M.O.N.E.Y',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                  color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  'M.O.N.E.Y',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
