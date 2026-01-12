@@ -1,4 +1,6 @@
 import 'package:flutter_master_prologue/models/chat.dart';
+import 'package:flutter_master_prologue/models/user.dart';
+import 'package:flutter_master_prologue/notifiers/chat_list_notifier.dart';
 import 'package:flutter_master_prologue/notifiers/chat_notifier.dart';
 import 'package:flutter_master_prologue/notifiers/send_chat_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,3 +29,7 @@ final chatRealtimeProvider = StreamProvider<List<Chat>>((ref) {
 final sendRealtimeChat = AsyncNotifierProvider<SendChatNotifier, void>(
   SendChatNotifier.new,
 );
+
+//ChatList AsyncProvider
+final chatListAsyncProvider =
+    AsyncNotifierProvider<ChatListNotifier, List<Users>>(ChatListNotifier.new);
