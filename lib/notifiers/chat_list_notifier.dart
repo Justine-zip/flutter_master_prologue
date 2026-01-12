@@ -12,7 +12,7 @@ class ChatListNotifier extends AsyncNotifier<List<Users>> {
   }
 
   Future<List<Users>> _fetchUsers() async {
-    final response = await _supabase.from('users').select();
+    final response = await _supabase.from('profiles').select();
     debugPrint('Response: $response');
     return response.map((e) => Users.fromJson(e)).toList();
   }

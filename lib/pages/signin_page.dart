@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/components/myTextField.dart';
-import 'package:flutter_master_prologue/pages/chat_list_page.dart';
 import 'package:flutter_master_prologue/pages/identity_page.dart';
 import 'package:flutter_master_prologue/providers/signin_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

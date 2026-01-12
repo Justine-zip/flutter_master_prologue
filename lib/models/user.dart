@@ -1,6 +1,6 @@
 class Users {
   String id;
-  String name;
+  String? name;
   String username;
 
   Users({required this.id, required this.name, required this.username});

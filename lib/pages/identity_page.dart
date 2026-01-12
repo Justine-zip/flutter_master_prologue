@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/pages/chat_list_page.dart';
+import 'package:flutter_master_prologue/providers/identity_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
@@ -19,7 +20,15 @@ class _IdentityPageState extends ConsumerState<IdentityPage> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 5), () async {
+      if (!mounted) return;
+
+      ref.read(identityProvider.notifier).setUserIdentity(widget.identity);
+
+      await ref
+          .read(createIdentityProvider.notifier)
+          .createIdentity(username: widget.identity);
+
       if (!mounted) return;
 
       Navigator.pushReplacement(
@@ -54,7 +63,7 @@ class _IdentityPageState extends ConsumerState<IdentityPage> {
               style: TextStyle(
                 color: Colors.white60,
                 fontFamily: 'Roboto',
-                fontSize: 48,
+                fontSize: widget.identity == 'ADMINISTRATOR' ? 40 : 48,
               ),
             ),
             const Text(

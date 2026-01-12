@@ -12,7 +12,10 @@ final chatAsyncProvider = AsyncNotifierProvider<ChatNotifier, List<Chat>>(
 );
 
 //Realtime StreamProvider
-final chatRealtimeProvider = StreamProvider<List<Chat>>((ref) {
+final chatRealtimeProvider = StreamProvider.family<List<Chat>, String>((
+  ref,
+  conversationId,
+) {
   final supabase = Supabase.instance.client;
 
   ref.keepAlive();
@@ -20,10 +23,9 @@ final chatRealtimeProvider = StreamProvider<List<Chat>>((ref) {
   return supabase
       .from('chat')
       .stream(primaryKey: ['id'])
+      .eq('conversation_id', conversationId)
       .order('created_at', ascending: true)
-      .map((rows) {
-        return rows.map((e) => Chat.fromJson(e)).toList();
-      });
+      .map((rows) => rows.map(Chat.fromJson).toList());
 });
 
 final sendRealtimeChat = AsyncNotifierProvider<SendChatNotifier, void>(

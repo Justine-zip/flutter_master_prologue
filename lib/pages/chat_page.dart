@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/components/myTextField.dart';
 import 'package:flutter_master_prologue/providers/chat_provider.dart';
+import 'package:flutter_master_prologue/providers/conversationId_provider.dart';
+import 'package:flutter_master_prologue/providers/identity_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
@@ -21,7 +23,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final chatAsync = ref.watch(chatRealtimeProvider);
+    final conversationId = ref.watch(conversationIdProvider);
+    final chatAsync = ref.watch(chatRealtimeProvider(conversationId!));
+    final identity = ref.watch(identityProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[850],
@@ -38,7 +42,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       itemCount: chats.length,
                       itemBuilder: (context, index) {
                         final chat = chats[index];
-                        final isMe = chat.sender == 'Josh';
+                        final isMe = chat.sender == identity.user;
 
                         return Align(
                           alignment:
@@ -101,7 +105,11 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
                     await ref
                         .read(sendRealtimeChat.notifier)
-                        .send(sender: 'Josh', receiver: 'Lea', message: text);
+                        .send(
+                          sender: identity.user!,
+                          receiver: identity.receiver!,
+                          message: text,
+                        );
                     myMsg.clear();
                   },
                   icon: Icon(Icons.send, color: Colors.white60),

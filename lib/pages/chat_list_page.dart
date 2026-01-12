@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/components/group_create.dart';
 import 'package:flutter_master_prologue/pages/chat_page.dart';
 import 'package:flutter_master_prologue/providers/chat_provider.dart';
+import 'package:flutter_master_prologue/providers/identity_provider.dart';
 import 'package:flutter_master_prologue/providers/supabase_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
@@ -18,7 +19,8 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
   @override
   Widget build(BuildContext context) {
     final chatList = ref.watch(chatListAsyncProvider);
-    final supabase = ref.read(supabaseProvider);
+    final supabase = ref.watch(supabaseProvider);
+    final identity = ref.watch(identityProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[850],
@@ -48,6 +50,16 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
                   ),
                 ),
                 Text(
+                  '${identity.user}',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
                   '\$17.2',
                   textAlign: TextAlign.end,
                   style: TextStyle(
@@ -65,24 +77,25 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
               data: (chatlist) {
                 debugPrint('CurrentUserId: ${supabase.auth.currentUser?.id}');
                 final filteredList =
-                    chatlist
-                        .where(
-                          (u) => u.id != '6f61dfd7-b003-4282-b680-e19262e45614',
-                        )
-                        .toList();
+                    chatlist.where((u) => u.username != identity.user).toList();
                 return ListView.builder(
                   itemCount: filteredList.length,
                   itemBuilder: (context, index) {
                     final clist = filteredList[index];
                     return GestureDetector(
-                      onTap:
-                          () => Navigator.push(
-                            context,
-                            PageAnimationTransition(
-                              page: ChatPage(),
-                              pageAnimationType: BottomToTopFadedTransition(),
-                            ),
+                      onTap: () {
+                        debugPrint(clist.username);
+                        ref
+                            .read(identityProvider.notifier)
+                            .setReceiverIdentity(clist.username);
+                        Navigator.push(
+                          context,
+                          PageAnimationTransition(
+                            page: ChatPage(),
+                            pageAnimationType: BottomToTopFadedTransition(),
                           ),
+                        );
+                      },
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.yellow,
