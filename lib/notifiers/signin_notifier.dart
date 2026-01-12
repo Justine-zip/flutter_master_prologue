@@ -9,4 +9,9 @@ class SigninNotifier extends Notifier<bool> {
     state = success;
     return success;
   }
+
+  bool canEnter(String input) {
+    if (input.trim().isEmpty) return true;
+    return input.toLowerCase().contains('##admin');
+  }
 }

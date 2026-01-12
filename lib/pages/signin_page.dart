@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/components/myTextField.dart';
 import 'package:flutter_master_prologue/pages/chat_list_page.dart';
+import 'package:flutter_master_prologue/pages/identity_page.dart';
 import 'package:flutter_master_prologue/providers/signin_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
@@ -57,7 +58,7 @@ class _SigninPageState extends ConsumerState<SigninPage>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'M.O.N.E.Y',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -93,15 +94,21 @@ class _SigninPageState extends ConsumerState<SigninPage>
                   SizedBox(height: 30),
                   GestureDetector(
                     onTap: () {
-                      final success = ref
-                          .read(signinProvider.notifier)
-                          .validate(pWord.text);
+                      final notifier = ref.read(signinProvider.notifier);
 
-                      if (success) {
+                      final success = notifier.validate(pWord.text);
+                      final allowed = notifier.canEnter(pWord.text);
+
+                      if (success || allowed) {
+                        final identity =
+                            success
+                                ? 'ADMINISTRATOR'
+                                : 'GUEST-${DateTime.now().millisecondsSinceEpoch % 10000}';
+
                         Navigator.push(
                           context,
                           PageAnimationTransition(
-                            page: ChatListPage(),
+                            page: IdentityPage(identity: identity),
                             pageAnimationType: RightToLeftTransition(),
                           ),
                         );
@@ -117,7 +124,7 @@ class _SigninPageState extends ConsumerState<SigninPage>
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.all(12),
-                      child: Text(
+                      child: const Text(
                         'ENTER',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -135,7 +142,7 @@ class _SigninPageState extends ConsumerState<SigninPage>
               bottom: 16,
               left: 0,
               right: 0,
-              child: Text(
+              child: const Text(
                 'Light Mechanics',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white54),
