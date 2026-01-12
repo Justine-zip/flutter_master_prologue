@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_master_prologue/components/myTextField.dart';
 import 'package:flutter_master_prologue/pages/chat_list_page.dart';
+import 'package:flutter_master_prologue/providers/signin_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_animation_transition/animations/right_to_left_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
@@ -12,8 +13,37 @@ class SigninPage extends ConsumerStatefulWidget {
   ConsumerState<SigninPage> createState() => _SigninPageState();
 }
 
-class _SigninPageState extends ConsumerState<SigninPage> {
+class _SigninPageState extends ConsumerState<SigninPage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController pWord = TextEditingController();
+
+  late AnimationController _shakeController;
+  late Animation<double> _shakeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _shakeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _shakeAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -10), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -10, end: 10), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 10, end: -10), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: -10, end: 10), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 10, end: 0), weight: 1),
+    ]).animate(_shakeController);
+  }
+
+  @override
+  void dispose() {
+    _shakeController.dispose();
+    pWord.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +70,46 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                   SizedBox(height: 60),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Mytextfield(
-                      text: pWord,
-                      color: Colors.white60,
-                      hint: 'password',
-                      isObscure: true,
-                      isFilled: false,
+                    child: AnimatedBuilder(
+                      animation: _shakeAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(_shakeAnimation.value, 0),
+                          child: child,
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Mytextfield(
+                          text: pWord,
+                          color: Colors.white60,
+                          hint: '********',
+                          isObscure: true,
+                          isFilled: false,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 30),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        PageAnimationTransition(
-                          page: ChatListPage(),
-                          pageAnimationType: RightToLeftTransition(),
-                        ),
-                      );
+                      final success = ref
+                          .read(signinProvider.notifier)
+                          .validate(pWord.text);
+
+                      if (success) {
+                        Navigator.push(
+                          context,
+                          PageAnimationTransition(
+                            page: ChatListPage(),
+                            pageAnimationType: RightToLeftTransition(),
+                          ),
+                        );
+                      } else {
+                        _shakeController.forward(from: 0);
+                      }
                     },
+
                     child: Container(
                       width: 200,
                       decoration: BoxDecoration(
