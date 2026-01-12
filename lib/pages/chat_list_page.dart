@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_master_prologue/components/group_create.dart';
 import 'package:flutter_master_prologue/pages/chat_page.dart';
 import 'package:flutter_master_prologue/providers/chat_provider.dart';
 import 'package:flutter_master_prologue/providers/supabase_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
+import 'package:page_animation_transition/page_animation_transition.dart';
 
 class ChatListPage extends ConsumerStatefulWidget {
   const ChatListPage({super.key});
@@ -19,21 +22,42 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[850],
-
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(context: context, builder: (context) => GroupCreate());
+        },
+        backgroundColor: Colors.white30,
+        child: Icon(Icons.group_add, color: Colors.grey[300]),
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                'M.O.N.E.Y',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                  color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'M.O.N.E.Y',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
+                Text(
+                  '\$17.2',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -54,7 +78,10 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
                       onTap:
                           () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChatPage()),
+                            PageAnimationTransition(
+                              page: ChatPage(),
+                              pageAnimationType: BottomToTopFadedTransition(),
+                            ),
                           ),
                       child: ListTile(
                         leading: CircleAvatar(
