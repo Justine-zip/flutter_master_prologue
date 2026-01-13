@@ -20,7 +20,7 @@ class _IdentityPageState extends ConsumerState<IdentityPage> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 5), () async {
+    Timer(const Duration(seconds: 3), () async {
       if (!mounted) return;
 
       final userId = await ref

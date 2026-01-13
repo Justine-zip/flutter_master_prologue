@@ -152,12 +152,12 @@ class _ChatListPageState extends ConsumerState<ChatListPage> {
                     ),
                     const Center(
                       child: Text(
-                        'Group',
+                        'CREW',
                         style: TextStyle(
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
-                          color: Colors.white,
+                          color: Colors.white60,
                         ),
                       ),
                     ),
