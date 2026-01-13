@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class GroupCreate extends StatefulWidget {
-  const GroupCreate({super.key});
+class CrewCreate extends StatefulWidget {
+  const CrewCreate({super.key});
 
   @override
-  State<GroupCreate> createState() => _GroupCreateState();
+  State<CrewCreate> createState() => _CrewCreateState();
 }
 
-class _GroupCreateState extends State<GroupCreate> {
-  final TextEditingController groupNameCtrl = TextEditingController();
+class _CrewCreateState extends State<CrewCreate> {
+  final TextEditingController crewNameCtrl = TextEditingController();
   final TextEditingController amountCtrl = TextEditingController();
 
-  String groupType = 'Free';
+  String crewType = 'Free';
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
       backgroundColor: Colors.white,
-      title: const Text('CREATE GROUP'),
+      title: const Text('CREATE CREW'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // GROUP NAME
+          // CREW NAME
           TextField(
-            controller: groupNameCtrl,
+            controller: crewNameCtrl,
             decoration: InputDecoration(
-              hintText: 'Group name',
+              hintText: 'Crew name',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -38,7 +38,7 @@ class _GroupCreateState extends State<GroupCreate> {
 
           // PAID / FREE DROPDOWN
           DropdownButtonFormField<String>(
-            value: groupType,
+            value: crewType,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -49,12 +49,12 @@ class _GroupCreateState extends State<GroupCreate> {
               DropdownMenuItem(value: 'Paid', child: Text('Paid')),
             ],
             onChanged: (value) {
-              setState(() => groupType = value!);
+              setState(() => crewType = value!);
             },
           ),
 
           // 👇 CONDITIONAL FIELD
-          if (groupType == 'Paid') ...[
+          if (crewType == 'Paid') ...[
             const SizedBox(height: 16),
             TextField(
               controller: amountCtrl,
@@ -77,15 +77,13 @@ class _GroupCreateState extends State<GroupCreate> {
           // GENERATE BUTTON
           ElevatedButton(
             onPressed: () {
-              final groupName = groupNameCtrl.text.trim();
+              final crewName = crewNameCtrl.text.trim();
               final amount = amountCtrl.text.trim();
 
-              if (groupName.isEmpty) return;
-              if (groupType == 'Paid' && amount.isEmpty) return;
+              if (crewName.isEmpty) return;
+              if (crewType == 'Paid' && amount.isEmpty) return;
 
-              debugPrint(
-                'Group: $groupName | Type: $groupType | Amount: $amount',
-              );
+              debugPrint('crew: $crewName | Type: $crewType | Amount: $amount');
 
               Navigator.pop(context);
             },

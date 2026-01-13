@@ -42,7 +42,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       itemCount: chats.length,
                       itemBuilder: (context, index) {
                         final chat = chats[index];
-                        final isMe = chat.sender == identity.user;
+                        final isMe = chat.senderId == identity.userId;
 
                         return Align(
                           alignment:
