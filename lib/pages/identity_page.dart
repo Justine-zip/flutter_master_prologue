@@ -23,11 +23,13 @@ class _IdentityPageState extends ConsumerState<IdentityPage> {
     Timer(const Duration(seconds: 5), () async {
       if (!mounted) return;
 
-      ref.read(identityProvider.notifier).setUserIdentity(widget.identity);
-
-      await ref
+      final userId = await ref
           .read(createIdentityProvider.notifier)
           .createIdentity(username: widget.identity);
+
+      ref
+          .read(identityProvider.notifier)
+          .setUserIdentity(widget.identity, userId);
 
       if (!mounted) return;
 

@@ -108,6 +108,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                         .send(
                           sender: identity.user!,
                           receiver: identity.receiver!,
+                          senderId: identity.userId!,
+                          receiverId: identity.receiverId!,
                           message: text,
                         );
                     myMsg.clear();

@@ -7,6 +7,6 @@ final identityProvider = NotifierProvider<IdentityValueNotifier, Identity>(
   IdentityValueNotifier.new,
 );
 
-final createIdentityProvider = AsyncNotifierProvider<IdentityNotifier, void>(
+final createIdentityProvider = AsyncNotifierProvider<IdentityNotifier, String>(
   IdentityNotifier.new,
 );

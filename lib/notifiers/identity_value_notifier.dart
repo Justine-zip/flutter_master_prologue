@@ -5,11 +5,11 @@ class IdentityValueNotifier extends Notifier<Identity> {
   @override
   Identity build() => const Identity();
 
-  void setUserIdentity(String value) {
-    state = state.copyWith(user: value);
+  void setUserIdentity(String username, String id) {
+    state = state.copyWith(user: username, userId: id);
   }
 
-  void setReceiverIdentity(String value) {
-    state = state.copyWith(receiver: value);
+  void setReceiverIdentity(String username, String id) {
+    state = state.copyWith(receiver: username, receiverId: id);
   }
 }

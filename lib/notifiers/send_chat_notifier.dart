@@ -11,9 +11,11 @@ class SendChatNotifier extends AsyncNotifier<void> {
   Future<void> send({
     required String sender,
     required String receiver,
+    required String senderId,
+    required String receiverId,
     required String message,
   }) async {
-    final conversationId = ref.watch(conversationIdProvider);
+    final conversationId = ref.read(conversationIdProvider);
 
     state = const AsyncLoading();
 
@@ -22,6 +24,8 @@ class SendChatNotifier extends AsyncNotifier<void> {
         'conversation_id': conversationId,
         'sender': sender,
         'receiver': receiver,
+        'sender_id': senderId,
+        'receiver_id': receiverId,
         'message': message,
       });
     });
